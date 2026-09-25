@@ -7,8 +7,13 @@ output: github_document
 
 ### Problem 1
 
+```{r, message=FALSE}
+library(tidyverse)
+```
+
 ```{r}
 data("penguins", package = "palmerpenguins")
+
 penguins
 ```
 
@@ -20,9 +25,16 @@ ncol(penguins)
 The `penguins` dataset contains size measurements for adult penguins observed on islands in the the Palmer Archipelago. It contains 344 penguins and measures 8 different variables. 
 
 ```{r}
-levels(penguins$species)
-levels(penguins$island)
-names(penguins)
+penguins |> 
+  pull(species) |> 
+  levels()
+
+penguins |> 
+  pull(island) |> 
+  levels()
+
+penguins |> 
+  names()
 ```
 
 Each penguin belongs to one of three species (Adelie, Gentoo, or Chinstrap) and was observed on one of three islands (Biscoe, Dream, or Torgersen).
@@ -30,7 +42,9 @@ Each penguin belongs to one of three species (Adelie, Gentoo, or Chinstrap) and 
 The measurements include bill length (mm) and depth (mm), flipper length (mm), and body mass (g), as well as each penguin's sex and year of observation. 
 
 ```{r}
-mean(penguins$flipper_length_mm, na.rm = TRUE)
+penguins |>
+  pull(flipper_length_mm) |>
+  mean(na.rm = TRUE)
 ```
 
 The mean flipper length is 200.9152 mm. 
@@ -64,7 +78,6 @@ p2_df <- tibble(
 p2_df
 ```
 
-
 ```{r}
 mean(pull(p2_df, norm_samp))
 mean(pull(p2_df, is_pos))
@@ -74,7 +87,7 @@ mean(pull(p2_df, fac_vec))
 
 The mean works for the numeric variable as well as the logical variable by returning the proportion of values that are `TRUE`. The mean fails for the character and factor variables and returns `NA` with a warning stating that the "argument is not numeric or logical: returning NA."
 
-```{r results='hide'}
+```{r results='hide', warning=FALSE}
 as.numeric(pull(p2_df, is_pos))
 as.numeric(pull(p2_df, chr_vec))
 as.numeric(pull(p2_df, fac_vec))
