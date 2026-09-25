@@ -1,0 +1,83 @@
+---
+title: "P8105_HW1_DI2251"
+author: "di2251"
+date: "2026-09-24"
+output: github_document
+---
+
+### Problem 1
+
+```{r}
+data("penguins", package = "palmerpenguins")
+penguins
+```
+
+```{r}
+nrow(penguins)
+ncol(penguins)
+```
+
+The `penguins` dataset contains size measurements for adult penguins observed on islands in the the Palmer Archipelago. It contains 344 penguins and measures 8 different variables. 
+
+```{r}
+levels(penguins$species)
+levels(penguins$island)
+names(penguins)
+```
+
+Each penguin belongs to one of three species (Adelie, Gentoo, or Chinstrap) and was observed on one of three islands (Biscoe, Dream, or Torgersen).
+
+The measurements include bill length (mm) and depth (mm), flipper length (mm), and body mass (g), as well as each penguin's sex and year of observation. 
+
+```{r}
+mean(penguins$flipper_length_mm, na.rm = TRUE)
+```
+
+The mean flipper length is 200.9152 mm. 
+
+```{r}
+library(ggplot2)
+
+ggplot(data = penguins,
+       aes(x = bill_length_mm, y = flipper_length_mm, color = species)) +
+  geom_point()
+```
+
+```{r}
+ggsave("penguin_scatterplot.png")
+```
+
+### Problem 2
+
+```{r results='hide'}
+library(tidyverse)
+```
+
+```{r}
+p2_df <- tibble(
+  norm_samp = rnorm(10),
+  is_pos = norm_samp > 0,
+  chr_vec = c("sun", "mercury", "venus", "earth", "mars", "jupiter", "saturn", "uranus", "neptune", "pluto"),
+  fac_vec = factor(c("cold", "warm", "hot", "cold", "warm", "hot", "cold", "warm", "hot", "cold"))
+)
+
+p2_df
+```
+
+
+```{r}
+mean(pull(p2_df, norm_samp))
+mean(pull(p2_df, is_pos))
+mean(pull(p2_df, chr_vec))
+mean(pull(p2_df, fac_vec))
+```
+
+The mean works for the numeric variable as well as the logical variable by returning the proportion of values that are `TRUE`. The mean fails for the character and factor variables and returns `NA` with a warning stating that the "argument is not numeric or logical: returning NA."
+
+```{r results='hide'}
+as.numeric(pull(p2_df, is_pos))
+as.numeric(pull(p2_df, chr_vec))
+as.numeric(pull(p2_df, fac_vec))
+```
+
+The logical vector converts cleanly with `TRUE` becoming 1 and `FALSE` becoming 0. The character vector however, becomes `NA` since there is no way to quantify or order the items. The factor vector becomes 1, 2, and 3. 
